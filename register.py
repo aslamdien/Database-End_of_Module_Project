@@ -109,10 +109,10 @@ class register:
                 mycursor.execute(insert2, val2)
 
                 mydb.commit()
+                messagebox.showinfo("Approved", "Registration Has Been Approved")
             except:
                 mycursor.execute('Select * from register')
                 mycursor.execute('Select * from next_of_kin')
-                messagebox.showinfo("Approved", "Registration Has Been Approved")
                 root.destroy()
                 import Login
 
