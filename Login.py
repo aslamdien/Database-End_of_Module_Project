@@ -22,6 +22,7 @@ passwordEnt = Entry(root)
 passwordEnt.place(x=220, y=100)
 
 def login():
+    global i
     for i in mycursor:
         if usernameEnt.get() == i[0] and passwordEnt.get() == i[5]:
             messagebox.showinfo("Loged In", "Access Granted")
@@ -29,7 +30,7 @@ def login():
 
     if usernameEnt.get() == '' or passwordEnt.get() == '':
         messagebox.showerror("Error", "Please fill Out Information")
-    elif usernameEnt.get() != i[0] and passwordEnt.get() != i[5]:
+    elif usernameEnt.get() != i[2] and passwordEnt.get() != i[6]:
         messagebox.showerror("Access Denied", "Unknown User")
         usernameEnt.delete(0, END)
         passwordEnt.delete(0, END)

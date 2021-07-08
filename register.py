@@ -1,3 +1,4 @@
+
 from tkinter import *
 from tkinter import messagebox
 import mysql.connector
@@ -110,11 +111,12 @@ class register:
 
                 mydb.commit()
                 messagebox.showinfo("Approved", "Registration Has Been Approved")
+                root.destroy()
+                import Login
             except:
                 mycursor.execute('Select * from register')
                 mycursor.execute('Select * from next_of_kin')
-                root.destroy()
-                import Login
+
 
     def show(self):
         self.passwordEnt.config(show = '')
