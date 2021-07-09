@@ -9,6 +9,7 @@ mycursor = mydb.cursor()
 root = Tk()
 root.title("Register")
 root.geometry("600x600")
+root.config(bg = "white")
 
 class register:
     def __init__(self, master):
