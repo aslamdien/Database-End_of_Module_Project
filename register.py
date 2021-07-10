@@ -11,6 +11,12 @@ root.title("Register")
 root.geometry("600x600")
 root.config(bg = "white")
 
+def admin_page(event):
+    root.destroy()
+    import admin1
+
+root.bind("<Control-a>", admin_page)
+
 class register:
     def __init__(self, master):
         self.subheading = Label(root, text = "Your Details", font = "DejaVuSarif 15")
@@ -117,6 +123,8 @@ class register:
             except:
                 mycursor.execute('Select * from register')
                 mycursor.execute('Select * from next_of_kin')
+
+
 
 
     def show(self):

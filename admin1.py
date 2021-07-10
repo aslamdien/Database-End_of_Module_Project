@@ -138,6 +138,9 @@ class admin:
         self.nextOfkin= Button(master, text = "View Next of Kin", command = self.nok)# View next of kin
         self.nextOfkin.place(x= 50, y= 720)
 
+        self.viewLog = Button(master, text ="View LogIn AND LogOut Records", command = self.log)
+        self.viewLog.place(x=200, y=720)
+
 
         count = 0
         for i in mycursor:
@@ -206,15 +209,19 @@ class admin:
     def select(self):
         curItem = self.treeView.focus()
         values = self.treeView.item(curItem, "values")
-        self.nameEnt.insert(0, values[1])
-        self.surnameEnt.insert(0, values[2])
-        self.id_numberEnt.insert(0, values[3])
-        self.phone_numberEnt.insert(0, values[4])
-        self.passwordEnt.insert(0, values[5])
-        self.next_of_kin_nameEnt.config(state = "disabled")
-        self.next_of_kin_contactEnt.config(state = "disabled")
-        self.selectUpdateBtn.config(state = "disabled")
-        self.updateBTN.config(state = "normal")
+        if curItem == '':
+            messagebox.showerror("Error", "Please Choose A Record to Update")
+
+        else:
+           self.nameEnt.insert(0, values[1])
+           self.surnameEnt.insert(0, values[2])
+           self.id_numberEnt.insert(0, values[3])
+           self.phone_numberEnt.insert(0, values[4])
+           self.passwordEnt.insert(0, values[5])
+           self.next_of_kin_nameEnt.config(state = "disabled")
+           self.next_of_kin_contactEnt.config(state = "disabled")
+           self.selectUpdateBtn.config(state = "disabled")
+           self.updateBTN.config(state = "normal")
 
     def update(self):
         curItem = self.treeView.focus()
@@ -231,12 +238,14 @@ class admin:
             (self.nameEnt.get(), self.surnameEnt.get(), self.id_numberEnt.get(), self.phone_numberEnt.get(), self.passwordEnt.get(), values[0])
         )
         mydb.commit()
-        messagebox.showinfo("Update", "Successful")
+        messagebox.showinfo("Updated", "Infomation Successfully Updated")
         self.nameEnt.delete(0,END)
         self.surnameEnt.delete(0,END)
         self.id_numberEnt.delete(0,END)
         self.phone_numberEnt.delete(0,END)
         self.passwordEnt.delete(0,END)
+        self.next_of_kin_nameEnt.config(state = "normal")
+        self.next_of_kin_contactEnt.config(state = "normal")
         self.selectUpdateBtn.config(state = "normal")
         self.updateBTN.config(state = "disabled")
 
@@ -257,8 +266,9 @@ class admin:
         root.destroy()
         import admin3
 
-
-
+    def log(self):
+        root.destroy()
+        import admin2
 
 x = admin(root)
 root.mainloop()

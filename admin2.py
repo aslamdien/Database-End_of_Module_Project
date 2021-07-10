@@ -39,7 +39,7 @@ class admin_login:
         # Create Treeview
         self.treeView = ttk.Treeview(master, selectmode = 'browse')
         # define our columns
-        self.treeView["columns"] = ("ID","Date", "Name", "Surname", "Loged In", "Loged Out")
+        self.treeView["columns"] = ("ID","Date", "Name", "Surname", "Loged In", "Loged Out", "Loged")
         # Name and Size Our Columns
         self.treeView.column("#0", width=0, minwidth = 100, stretch = NO)
         self.treeView.column("ID", anchor=CENTER, width = 40)
@@ -48,7 +48,7 @@ class admin_login:
         self.treeView.column("Surname", anchor=W, width=100)
         self.treeView.column("Loged In", anchor=CENTER, width=150)  # phantom column
         self.treeView.column("Loged Out", anchor=CENTER, width=150)
-
+        self.treeView.column("Loged", anchor=CENTER, width=150)
 
         # Create Headings
         # self.tree_view_admin.heading("#0", text="", anchor=CENTER)
@@ -58,9 +58,10 @@ class admin_login:
         self.treeView.heading("Surname", text="Surname", anchor=CENTER)
         self.treeView.heading("Loged In", text="Loged In", anchor=CENTER)
         self.treeView.heading("Loged Out", text="Loged Out", anchor=CENTER)
+        self.treeView.heading("Loged",text = "Log In or Out", anchor=CENTER)
 
 
-        self.treeView.place(x=150, y=120)
+        self.treeView.place(x=100, y=120)
 
         #Sript rows into odd and evens
         self.treeView.tag_configure("odd", background = "grey")
@@ -83,6 +84,7 @@ class admin_login:
         log_out = StringVar()
         loggin = StringVar()
         loggOut = StringVar()
+        in_or_out = StringVar()
 
         #Entries
         self.date = Entry(master, textvariable = date)
@@ -90,17 +92,20 @@ class admin_login:
         self.surname = Entry(master, textvariable = surname)
         self.log1 = Entry(master, textvariable = loggin)
         self.log2 = Entry(master, textvariable = loggOut)
+        self.inORout= Entry(master, textvariable = in_or_out)
 
 
         self.log_InEnt = Entry(master, textvariable = log_in)
         self.log_InEnt.place(x=200, y=440)
+        self.log_InEnt.config(width = 2)
 
         self.log_OutEnt = Entry(master, textvariable = log_out)
         self.log_OutEnt.place(x=200, y=490)
+        self.log_OutEnt.config(width = 2)
 
 
         #Button
-        self.checkbtn = Button(master, text = "Check Loged In and Loged Out ")
+        self.checkbtn = Button(master, text = "Check Loged In and Loged Out ", command = self.check)
         self.checkbtn.place(x=50, y=560)
 
         self.logInbtn = Button(master, text = "Log In", command = self.logIn)
@@ -116,9 +121,9 @@ class admin_login:
         for i in mycursor:
            #print(i)
            if count % 2 == 0:
-               self.treeView.insert("", 'end', iid = count, values = (i[0], i[1], i[2], i[3], i[8], i[9]), tags = ("even",))
+               self.treeView.insert("", 'end', iid = count, values = (i[0], i[1], i[2], i[3], i[8], i[9],i[10]), tags = ("even",))
            else:
-               self.treeView.insert("", 'end', iid = count, values = (i[0], i[1], i[2], i[3], i[8], i[9]), tags = ("odd",))
+               self.treeView.insert("", 'end', iid = count, values = (i[0], i[1], i[2], i[3], i[8], i[9], i[10]), tags = ("odd",))
            count += 1
         mydb.commit()
 
@@ -127,46 +132,81 @@ class admin_login:
     def logIn(self):
         curItem = self.treeView.focus()
         values = self.treeView.item(curItem, "values")
-        self.date.insert(0, date_now)
-        self.name.insert(0, values[2])
-        self.surname.insert(0, values[3])
-        self.log1.insert(0, time_now)
-        self.log2.insert(0, time_reset)
-        self.treeView.item(curItem, values=(values[0], self.date.get(), self.name.get(), self.surname.get(), self.log1.get(), self.log2.get()))
+        if curItem == '':
+            messagebox.showerror("Error", "Please Select A Row To Log In")
 
-        mycursor.execute('UPDATE register SET date_of_entry = %s,loged_in = %s , loged_out = %s WHERE ID = %s',
-                         (self.date.get(),self.log1.get(), self.log2.get(),values[0]))
+        else:
+            self.date.insert(0, date_now)
+            self.name.insert(0, values[2])
+            self.surname.insert(0, values[3])
+            self.log1.insert(0, time_now)
+            self.log2.insert(0, time_reset)
+            self.inORout.insert(0, "Log In")
+            self.treeView.item(curItem, values=(values[0], self.date.get(), self.name.get(), self.surname.get(), self.log1.get(), self.log2.get(), self.inORout.get()))
 
-        mydb.commit()
-        messagebox.showinfo("Update", "Login Update Successful")
-        self.date.delete(0, END)
-        self.name.delete(0, END)
-        self.surname.delete(0, END)
-        self.log1.delete(0, END)
-        self.log2.delete(0, END)
+            mycursor.execute('UPDATE register SET date_of_entry = %s,loged_in = %s , loged_out = %s, in_or_out = %s WHERE ID = %s',
+                             (self.date.get(),self.log1.get(), self.log2.get(), self.inORout.get(),values[0]))
+
+            mydb.commit()
+            messagebox.showinfo("Update", "Login Update Successful")
+            self.date.delete(0, END)
+            self.name.delete(0, END)
+            self.surname.delete(0, END)
+            self.log1.delete(0, END)
+            self.log2.delete(0, END)
+            self.inORout.delete(0, END)
+            self.log_InEnt.config(state = "normal")
+            self.log_InEnt.delete(0, END)
+            self.log_OutEnt.config(state = "normal")
+            self.log_OutEnt.delete(0, END)
 
 
     def logOut(self):
         curItem = self.treeView.focus()
         values = self.treeView.item(curItem, "values")
-        self.date.insert(0, values[1])
-        self.name.insert(0, values[2])
-        self.surname.insert(0, values[3])
-        self.log1.insert(0, values[4])
-        self.log2.insert(0, time_now)
-        self.treeView.item(curItem, values=(values[0], self.date.get(), self.name.get(), self.surname.get(), self.log1.get(), self.log2.get()))
+        if curItem == '':
+            messagebox.showerror("Error", "Please Select A Row To Log Out")
 
-        mycursor.execute( 'UPDATE register SET loged_out = %s WHERE ID = %s',
-                          (self.log2.get(),values[0]))
+        else:
+            self.date.insert(0, values[1])
+            self.name.insert(0, values[2])
+            self.surname.insert(0, values[3])
+            self.log1.insert(0, values[4])
+            self.log2.insert(0, time_now)
+            self.inORout.insert(0, "Log Out")
+            self.treeView.item(curItem, values=(values[0], self.date.get(), self.name.get(), self.surname.get(), self.log1.get(), self.log2.get(), self.inORout.get()))
+
+            mycursor.execute( 'UPDATE register SET loged_out = %s, in_or_out = %s WHERE ID = %s',
+                              (self.log2.get(), self.inORout.get(), values[0]))
 
 
-        mydb.commit()
-        messagebox.showinfo("Update", "LogOut Update Successful")
-        self.date.delete(0, END)
-        self.name.delete(0, END)
-        self.surname.delete(0, END)
-        self.log1.delete(0, END)
-        self.log2.delete(0, END)
+            mydb.commit()
+            messagebox.showinfo("Update", "LogOut Update Successful")
+            self.date.delete(0, END)
+            self.name.delete(0, END)
+            self.surname.delete(0, END)
+            self.log1.delete(0, END)
+            self.log2.delete(0, END)
+            self.inORout.delete(0, END)
+            self.log_InEnt.config(state = "normal")
+            self.log_InEnt.delete(0, END)
+            self.log_OutEnt.config(state = "normal")
+            self.log_OutEnt.delete(0, END)
+
+    def check(self):
+        self.log_InEnt.config(state = "normal")
+        self.log_InEnt.delete(0,END)
+        self.log_OutEnt.config(state = "normal")
+        self.log_OutEnt.delete(0, END)
+        mydb = mysql.connector.connect(user = 'lifechoices', password = '@Lifechoices1234', host = '127.0.0.1', database = 'End_of_Module', auth_plugin='mysql_native_password')
+        mycursor = mydb.cursor()
+
+        mycursor.execute('Select in_or_out, COUNT(*) FROM register GROUP BY in_or_out')
+        results = mycursor.fetchall()
+        self.log_InEnt.insert(0, results[0][1])
+        self.log_InEnt.config(state="readonly")
+        self.log_OutEnt.insert(0,results[1][1])
+        self.log_OutEnt.config(state = "readonly")
 
     def back(self):
         root.destroy()

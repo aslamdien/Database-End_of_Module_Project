@@ -14,11 +14,11 @@ time_now = datetime.now().time().strftime('%H:%M:%S')
 
 root = Tk()
 root.title("Admin: User Next of Kin")
-root.geometry("800x600")
+root.geometry("800x700")
 root.config(bg ="#010101")
 
 my_pic = PhotoImage(file = "Lifechoices-300x91.png")
-background = Label(root, image = my_pic).place(x=300, y=10)
+background = Label(root, image = my_pic).place(x=250, y=10)
 class admin_login:
     def __init__(self, master):
         global mycursor
@@ -54,7 +54,7 @@ class admin_login:
         self.treeView.heading("NOKO", text="Is Next of KIn Of", anchor=CENTER)
 
 
-        self.treeView.place(x=170, y=80)
+        self.treeView.place(x=170, y=120)
 
         #Sript rows into odd and evens
         self.treeView.tag_configure("odd", background = "grey")
@@ -63,14 +63,14 @@ class admin_login:
 
         # Frames
         self.frame1 = LabelFrame(master)
-        self.frame1.place(x=30, y=370, width = 400, height = 175)
+        self.frame1.place(x=30, y=420, width = 400, height = 175)
 
         # Labels
         self.namelab = Label(master, text = "Name:")
-        self.namelab.place(x=50, y=390)
+        self.namelab.place(x=50, y=440)
 
         self.mobilelab = Label(master, text = "Mobile Number:")
-        self.mobilelab.place(x=50, y=440)
+        self.mobilelab.place(x=50, y=490)
 
         name = StringVar()
         mobile = StringVar()
@@ -79,27 +79,27 @@ class admin_login:
 
         #Entries
         self.nameEnt = Entry(master, textvariable = name)
-        self.nameEnt.place(x=100, y=390)
+        self.nameEnt.place(x=100, y=440)
 
         self.mobileEnt = Entry(master, textvariable = mobile)
-        self.mobileEnt.place(x=160, y=440)
+        self.mobileEnt.place(x=160, y=490)
 
         self.en = Entry(master, textvariable = ntk)
 
 
         #Button
         self.selectUpdateBtn = Button(master, text = "Select for Update", command = self.select)# Select for Update
-        self.selectUpdateBtn.place(x=450, y=390)
+        self.selectUpdateBtn.place(x=450, y=440)
 
         self.updateBTN = Button(master, text = "Update", command = self.update)# Update Button
-        self.updateBTN.place(x = 450, y=440)
+        self.updateBTN.place(x = 450, y=490)
         self.updateBTN.config(state = "disabled")
 
         self.cancelbtn = Button(master, text = "CANCEL", command = self.cancel)# Cancel Button
-        self.cancelbtn.place(x = 450, y =490)
+        self.cancelbtn.place(x = 450, y =540)
 
         self.backbtn = Button(master, text = "Back", command = self.back)
-        self.backbtn.place(x=550, y= 490)
+        self.backbtn.place(x=550, y= 540)
 
         count = 0
         for i in mycursor:
@@ -116,11 +116,15 @@ class admin_login:
     def select(self):
         curItem = self.treeView.focus()
         values = self.treeView.item(curItem, "values")
-        self.nameEnt.insert(0, values[1])
-        self.mobileEnt.insert(0, values[2])
-        self.en.insert(0, values[3])
-        self.selectUpdateBtn.config(state = "disabled")
-        self.updateBTN.config(state = "normal")
+        if curItem == '':
+            messagebox.showerror("Error", "Please Select A Row To Update")
+
+        else:
+            self.nameEnt.insert(0, values[1])
+            self.mobileEnt.insert(0, values[2])
+            self.en.insert(0, values[3])
+            self.selectUpdateBtn.config(state = "disabled")
+            self.updateBTN.config(state = "normal")
 
     def update(self):
         curItem = self.treeView.focus()
