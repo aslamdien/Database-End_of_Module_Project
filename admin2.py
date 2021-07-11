@@ -39,16 +39,17 @@ class admin_login:
         # Create Treeview
         self.treeView = ttk.Treeview(master, selectmode = 'browse')
         # define our columns
-        self.treeView["columns"] = ("ID","Date", "Name", "Surname", "Loged In", "Loged Out", "Loged")
+        self.treeView["columns"] = ("ID","Date", "Name", "Surname","Reason", "Loged In", "Loged Out", "Loged")
         # Name and Size Our Columns
         self.treeView.column("#0", width=0, minwidth = 100, stretch = NO)
         self.treeView.column("ID", anchor=CENTER, width = 40)
         self.treeView.column("Date", anchor = CENTER, width = 100)
         self.treeView.column("Name", anchor=W, width=100)
         self.treeView.column("Surname", anchor=W, width=100)
-        self.treeView.column("Loged In", anchor=CENTER, width=150)  # phantom column
-        self.treeView.column("Loged Out", anchor=CENTER, width=150)
-        self.treeView.column("Loged", anchor=CENTER, width=150)
+        self.treeView.column("Reason", anchor=CENTER, width=180)
+        self.treeView.column("Loged In", anchor=CENTER, width=110)  # phantom column
+        self.treeView.column("Loged Out", anchor=CENTER, width=110)
+        self.treeView.column("Loged", anchor=CENTER, width=120)
 
         # Create Headings
         # self.tree_view_admin.heading("#0", text="", anchor=CENTER)
@@ -56,12 +57,13 @@ class admin_login:
         self.treeView.heading("Date", text = "Date", anchor=CENTER)
         self.treeView.heading("Name", text="Name", anchor=CENTER)
         self.treeView.heading("Surname", text="Surname", anchor=CENTER)
+        self.treeView.heading("Reason", text = "Reason For Attendance",anchor=CENTER)
         self.treeView.heading("Loged In", text="Loged In", anchor=CENTER)
         self.treeView.heading("Loged Out", text="Loged Out", anchor=CENTER)
         self.treeView.heading("Loged",text = "Log In or Out", anchor=CENTER)
 
 
-        self.treeView.place(x=100, y=120)
+        self.treeView.place(x=70, y=120)
 
         #Sript rows into odd and evens
         self.treeView.tag_configure("odd", background = "grey")
@@ -85,6 +87,7 @@ class admin_login:
         loggin = StringVar()
         loggOut = StringVar()
         in_or_out = StringVar()
+        reason = StringVar()
 
         #Entries
         self.date = Entry(master, textvariable = date)
@@ -93,6 +96,7 @@ class admin_login:
         self.log1 = Entry(master, textvariable = loggin)
         self.log2 = Entry(master, textvariable = loggOut)
         self.inORout= Entry(master, textvariable = in_or_out)
+        self.reason = Entry(master, textvariable = reason)
 
 
         self.log_InEnt = Entry(master, textvariable = log_in)
@@ -121,9 +125,9 @@ class admin_login:
         for i in mycursor:
            #print(i)
            if count % 2 == 0:
-               self.treeView.insert("", 'end', iid = count, values = (i[0], i[1], i[2], i[3], i[8], i[9],i[10]), tags = ("even",))
+               self.treeView.insert("", 'end', iid = count, values = (i[0], i[1], i[2], i[3],i[7], i[9], i[10],i[11]), tags = ("even",))
            else:
-               self.treeView.insert("", 'end', iid = count, values = (i[0], i[1], i[2], i[3], i[8], i[9], i[10]), tags = ("odd",))
+               self.treeView.insert("", 'end', iid = count, values = (i[0], i[1], i[2], i[3],i[7], i[9], i[10], i[11]), tags = ("odd",))
            count += 1
         mydb.commit()
 
@@ -139,10 +143,11 @@ class admin_login:
             self.date.insert(0, date_now)
             self.name.insert(0, values[2])
             self.surname.insert(0, values[3])
+            self.reason.insert(0, values[4])
             self.log1.insert(0, time_now)
             self.log2.insert(0, time_reset)
             self.inORout.insert(0, "Log In")
-            self.treeView.item(curItem, values=(values[0], self.date.get(), self.name.get(), self.surname.get(), self.log1.get(), self.log2.get(), self.inORout.get()))
+            self.treeView.item(curItem, values=(values[0], self.date.get(), self.name.get(), self.surname.get(),self.reason.get(), self.log1.get(), self.log2.get(), self.inORout.get()))
 
             mycursor.execute('UPDATE register SET date_of_entry = %s,loged_in = %s , loged_out = %s, in_or_out = %s WHERE ID = %s',
                              (self.date.get(),self.log1.get(), self.log2.get(), self.inORout.get(),values[0]))
@@ -154,6 +159,7 @@ class admin_login:
             self.surname.delete(0, END)
             self.log1.delete(0, END)
             self.log2.delete(0, END)
+            self.reason.delete(0, END)
             self.inORout.delete(0, END)
             self.log_InEnt.config(state = "normal")
             self.log_InEnt.delete(0, END)
@@ -171,10 +177,11 @@ class admin_login:
             self.date.insert(0, values[1])
             self.name.insert(0, values[2])
             self.surname.insert(0, values[3])
-            self.log1.insert(0, values[4])
+            self.reason.insert(0, values[4])
+            self.log1.insert(0, values[5])
             self.log2.insert(0, time_now)
             self.inORout.insert(0, "Log Out")
-            self.treeView.item(curItem, values=(values[0], self.date.get(), self.name.get(), self.surname.get(), self.log1.get(), self.log2.get(), self.inORout.get()))
+            self.treeView.item(curItem, values=(values[0], self.date.get(), self.name.get(), self.surname.get(),self.reason.get(), self.log1.get(), self.log2.get(), self.inORout.get()))
 
             mycursor.execute( 'UPDATE register SET loged_out = %s, in_or_out = %s WHERE ID = %s',
                               (self.log2.get(), self.inORout.get(), values[0]))
@@ -207,6 +214,7 @@ class admin_login:
         self.log_InEnt.config(state="readonly")
         self.log_OutEnt.insert(0,results[1][1])
         self.log_OutEnt.config(state = "readonly")
+
 
     def back(self):
         root.destroy()

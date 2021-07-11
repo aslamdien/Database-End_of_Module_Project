@@ -178,7 +178,7 @@ class admin:
             mycursor.execute('INSERT INTO register (name, surname, id_number, phone_number, password) VALUES (%s, %s, %s, %s, %s)', (self.nameEnt.get(), self.surnameEnt.get(), self.id_numberEnt.get(), self.phone_numberEnt.get(), self.passwordEnt.get()))
             mycursor.execute('INSERT INTO next_of_kin (name, mobile_number, next_of_kin_of) VALUES (%s, %s, %s)',(self.next_of_kin_nameEnt.get(), self.next_of_kin_contactEnt.get(), self.nameEnt.get()))
 
-
+            # New info insert
             self.treeView.insert("", 'end', text = "", values = (mycursor.lastrowid, self.nameEnt.get(), self.surnameEnt.get(), self.id_numberEnt.get(), self.id_numberEnt.get(), self.passwordEnt.get()))
 
             mydb.commit()

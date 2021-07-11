@@ -19,6 +19,9 @@ root.bind("<Control-a>", admin_page)
 
 class register:
     def __init__(self, master):
+        self.frame1 = LabelFrame(master)
+        self.frame1.place(x=40, y= 5, width = 500, height = 220)
+
         self.subheading = Label(root, text = "Your Details", font = "DejaVuSarif 15")
         self.subheading.place(x=240, y=10)
 
@@ -42,40 +45,46 @@ class register:
         self.phone_numberEnt = Entry(master)
         self.phone_numberEnt.place(x=280, y=180)
 
+        self.frame2 = LabelFrame(master)
+        self.frame2.place(x=40, y=240, width = 500, height = 120)
+
         self.next_of_kin_heading = Label(master, text="Next Of Kin Contact Details", font = "DejaVuSarif 15")
-        self.next_of_kin_heading.place(x=180, y=230)
+        self.next_of_kin_heading.place(x=180, y=250)
 
         self.next_of_kin_namelab = Label(master, text = "Next of Kin`s Name:")
-        self.next_of_kin_namelab.place(x=130, y=270)
+        self.next_of_kin_namelab.place(x=130, y=290)
         self.next_of_kin_nameEnt = Entry(root)
-        self.next_of_kin_nameEnt.place(x=280, y=270)
+        self.next_of_kin_nameEnt.place(x=280, y=290)
 
         self.next_of_kin_contactlab = Label(master, text = "Next of Kin`s Mobile Number:")
-        self.next_of_kin_contactlab.place(x=75, y=300)
+        self.next_of_kin_contactlab.place(x=75, y=320)
         self.next_of_kin_contactEnt = Entry(master)
-        self.next_of_kin_contactEnt.place(x=280, y=300)
+        self.next_of_kin_contactEnt.place(x=280, y=320)
+
+        self.frame3 = LabelFrame(master)
+        self.frame3.place(x=40, y=370, width = 500, height = 150)
 
         self.passwordHeading = Label(master, text = "Create Password", font = "DejaVuSarif 15")
-        self.passwordHeading.place(x=220, y=350)
+        self.passwordHeading.place(x=220, y=380)
 
         self.passwordlab = Label(master, text = "Please Enter A Password:")
-        self.passwordlab.place(x=110, y=390)
+        self.passwordlab.place(x=110, y=420)
         self.passwordEnt = Entry(master, show = "*")
-        self.passwordEnt.place(x=280, y=390)
+        self.passwordEnt.place(x=280, y=420)
 
         self.confirmLab = Label(master, text = "Confirm Your Password:")
-        self.confirmLab.place(x=110, y=420)
+        self.confirmLab.place(x=110, y=450)
         self.confirmEnt = Entry(master, show = "*")
-        self.confirmEnt.place(x=280, y=420)
+        self.confirmEnt.place(x=280, y=450)
 
         self.registerbtn = Button(master, text = "Register", command = self.register)
-        self.registerbtn.place(x=100, y=500)
+        self.registerbtn.place(x=100, y=540)
 
         self.clearbtn = Button(master, text="Clear")
-        self.clearbtn.place(x=200, y=500)
+        self.clearbtn.place(x=200, y=540)
 
         self.showpass = Button(master, text = "Show Password", command = self.show)
-        self.showpass.place(x=280, y=450)
+        self.showpass.place(x=280, y=480)
 
     def register(self):
         self.fisrt_nameEnt.get()
