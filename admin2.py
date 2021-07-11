@@ -1,4 +1,5 @@
 import datetime
+import pdb
 from tkinter import *
 from tkinter import ttk
 import mysql.connector
@@ -195,6 +196,7 @@ class admin_login:
             self.log1.delete(0, END)
             self.log2.delete(0, END)
             self.inORout.delete(0, END)
+            self.reason.delete(0,END)
             self.log_InEnt.config(state = "normal")
             self.log_InEnt.delete(0, END)
             self.log_OutEnt.config(state = "normal")
@@ -208,7 +210,7 @@ class admin_login:
         mydb = mysql.connector.connect(user = 'lifechoices', password = '@Lifechoices1234', host = '127.0.0.1', database = 'End_of_Module', auth_plugin='mysql_native_password')
         mycursor = mydb.cursor()
 
-        mycursor.execute('Select in_or_out, COUNT(*) FROM register GROUP BY in_or_out')
+        mycursor.execute('Select in_or_out, COUNT(*) FROM register GROUP BY in_or_out ORDER BY in_or_out')
         results = mycursor.fetchall()
         self.log_InEnt.insert(0, results[0][1])
         self.log_InEnt.config(state="readonly")

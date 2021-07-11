@@ -13,7 +13,7 @@ time_now = datetime.now().time().strftime('%H:%M:%S')
 root = Tk()
 root.title("LogOut Page")
 root.geometry("500x300")
-root.config(bg = "#4850c8")
+root.config(bg = "red")
 
 my_pic = PhotoImage(file = "life.png")
 background = Label(root, image = my_pic).place(x=100, y=10)

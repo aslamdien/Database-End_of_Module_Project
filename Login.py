@@ -36,7 +36,7 @@ class login:
 
         self.passwordlab = Label(master, text = "Please Enter Your Password:")
         self.passwordlab.place(x=25, y=200)
-        self.passwordEnt = Entry(master)
+        self.passwordEnt = Entry(master, show = "*")
         self.passwordEnt.place(x=220, y=200)
 
         option = StringVar()
